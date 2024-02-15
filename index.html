@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+
+        // definição do tipo de renderização, da dimensão da tela e das funções que irão compor a cena
+        var config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+    
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+    
+        var game = new Phaser.Game(config);
+    
+        //carregamento das imagens para o jogo
+        function preload() {
+            this.load.image('bg', 'assets/bg_space.png');
+            this.load.spritesheet('bird', 'assets/bird-green.png', {frameWidth: 75, frameHeight: 75});
+            this.load.spritesheet('passaroDois', 'assets/bird-red.png', {frameWidth: 75, frameHeight: 75});
+        }
+    
+        function create() {
+            //colocação das imagens carregadas na tela
+            this.add.image(400, 300, 'bg').setScale(1.2);
+            passarinho = this.add.sprite(100, 100, 'bird').setScale(1.3);
+
+            //configuração da animação do pássaro verde
+            this.anims.create({
+                //nome dessa animação
+                key: 'fly',
+                //inidicação de quais são os frames
+                frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 7 }),
+                //quantidade de frames em 1 segundo
+                frameRate: 10,
+                //-1 indica repetição contínua
+                repeat: -1
+            });
+
+            //iniciar a animação do pássaro verde
+            passarinho.anims.play('fly', true);
+
+        }
+
+
+        //movimentação do pássaro na tela
+        function update() { 
+            
+            //passarinho permanece na mesma posição y e aumenta a x
+            if (passarinho.x === 100 && passarinho.y === 100){
+                passarinho.setFlip(false,true);
+                passarinho.ida = true;
+                //uso do for
+                for (let i = 0; i < 3; i ++){
+                    console.log(i);
+                }
+            }
+
+            if (passarinho.x < 700 && passarinho.ida === true){
+                console.log("O passarinho movimenta-se para a direita");
+                passarinho.x += 5;
+            }
+
+            //passarinho mantem a mesma posição x e aumenta a y
+            if (passarinho.x === 700 && passarinho.y === 100){
+                passarinho.setFlip(false,false);
+                passarinho.desce = true;
+            }
+
+            if (passarinho.y < 500 && passarinho.desce === true){
+                console.log("O passarinho desce");
+                passarinho.y += 5;
+            }
+
+            //passarinho reduz a posição x e mantem a y
+            if (passarinho.x === 700 && passarinho.y === 500){
+                passarinho.setFlip(true,false);
+                passarinho.ida = false;
+            }
+
+            if (passarinho.x > 100 && passarinho.ida === false){
+                console.log("O passarinho movimenta-se para esquerda");
+                passarinho.x -= 5;
+            }
+
+            //passarinho mantem a posição x e reduz a y
+            if (passarinho.x === 100 && passarinho.y === 500){
+                passarinho.setFlip(true,true);
+                passarinho.desce = false;
+            }
+
+            if (passarinho.y > 100 && passarinho.desce === false){
+                console.log("O passarinho sobe");
+                passarinho.y -= 5;
+            }
+
+
+        }
+    
+    </script>
+
+</body>
+</html>
+
+
